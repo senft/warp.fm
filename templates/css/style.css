@@ -1,0 +1,81 @@
+@import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz&subset=latin);
+
+body{
+    background-color: #F5F4EF;
+    font-size: 8pt;
+    font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+a:link, a:visited {
+    color: #D51007;
+
+	padding: 0 1px;
+	text-decoration: underline;
+}
+a:hover, a:active {
+    #background-color: #D51007;
+	#color: #000;
+	text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Yanone Kaffeesatz', arial, serif;
+    text-shadow: 1px 1px 2px #777;
+}
+h1{ font-size: 25pt; text-shadow: 1px 1px 3px #777;}
+h2{ font-size: 19pt; }
+h3{ font-size: 17pt; }
+h4{ font-size: 15pt; }
+
+h2.stats{color: #D51007; text-shadow: 0px 0px 0px #000;}
+
+.description{text-align: center; font-size: 12pt;}
+
+div#header{
+    width: 54%;
+    min-width: 600px;
+    margin-top: 20px;
+	margin-left:auto;
+	margin-right:auto;
+}
+div#content{
+    width: 50%;
+    min-width: 600px;
+    margin-top: 20px;
+	margin-left:auto;
+	margin-right:auto;
+
+    padding: 5px 30px;
+
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 0px 7px #888;
+}
+
+div#footer{
+    width: 50%;
+    min-width: 600px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: right;
+	margin-left:auto;
+	margin-right:auto;
+
+    font-size: 12pt;
+    font-family: 'Yanone Kaffeesatz', arial, serif;
+    color: #777;
+}
+
+table.tracks {border-collapse:collapse; width: 100%;}
+table.tracks tr.first{border-top: 0px solid #c0c0c0;}
+table.tracks td.image{width: 33px;}
+table.tracks td.time{color: #999; text-align: right;}
+
+table.top_list {border-collapse:collapse; width: 100%;}
+table.top_list tr{line-height: 20px;}
+table.top_list tr.odd{background-color: #e5e5e5;}
+table.top_list td.id{color: #666; padding-left: 20px;}
+table.top_list td.rank{text-align: right; padding-right: 20px;}

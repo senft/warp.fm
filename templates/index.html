@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1>Welcome to warp.fm</h1>
+{% endblock %}
+
+{% block content %}
+
+<h2 align="right">warp.fm takes you back exactly one year and presents you your charts for that exact
+    day. You can even receive a daily summary if you sign up.</h2>
+
+<p class="description">Fill in your last.fm usename and off we go!<br />
+But remember, don't alter the past at any cost!</p>
+
+<form method="post" action="warp">
+    <p align="center">
+        <input value="iom" name="username" />
+        <input type="submit" value="Submit">
+    </p>
+</form>
+
+
+{% endblock %}
