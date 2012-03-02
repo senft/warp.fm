@@ -82,7 +82,7 @@ class FetchFM:
                  'limit': 200,
                  'format': 'json'}
 
-        #print 'Query: ', query
+        print 'Query: ', query
 
         try:
             #Create an API Request
@@ -128,24 +128,18 @@ class FetchFM:
 
                 timestamp = float(track['date']['uts'])
                 time = datetime.fromtimestamp(timestamp).strftime('%H:%M')
+                streamable = track['streamable'] == '1'
 
                 result['tracks'].append(
                     {'artist': {'name': track['artist']['#text']},
                      'track': {'title': track['name'],
                                'album': track['album']['#text'],
                                'url': track['url'],
+                               'streamable': streamable,
                                'time': time,
-                               'img_small':
-                               track['image'][0]['#text']}})
+                               'img_small': track['image'][0]['#text']}})
 
-            # If we have 10+ tracks pick 10 random ones, else pick all
-            if len(result['tracks']) <= NUM_RANDOM_TRACKS:
-                result['random_tracks'] = result['tracks']
-            else:
-                result['random_tracks'] = random.sample(result['tracks'],
-                                                        NUM_RANDOM_TRACKS)
-            # TODO sort random tracks by the time were played
-
+            result['random_tracks'] = self._get_random_tracks(result['tracks'])
             result['top_tracks'] = self._parse_top_tracks(result['tracks'])
             result['top_artists'] = self._parse_top_artists(result['tracks'])
             result['top_albums'] = self._parse_top_albums(result['tracks'])
@@ -155,25 +149,47 @@ class FetchFM:
 
         return result
 
+    def _get_random_tracks(self, tracks):
+        # If we have 10+ tracks pick 10 random ones, else pick all
+        if len(tracks) <= NUM_RANDOM_TRACKS:
+            rtracks = tracks
+        else:
+            rtracks = random.sample(tracks, NUM_RANDOM_TRACKS)
+        rtracks = sorted(rtracks, key=lambda x: x['track']['time'])
+        return rtracks
+
     def _parse_top_tracks(self, tracks):
-        d = defaultdict(int)
+        # TODO This results in a:
+        # <a href={{ track.track.track.url }}>{{ track.track.track.title }}</a>
+        # in the template...
+        count = {}
         for track in tracks:
-            artisttitle = ''.join([track['artist']['name'],
-                                   ' - ', track['track']['title']])
-            d[artisttitle] += 1
-        result = sorted(d.iteritems(), key=itemgetter(1), reverse=True)
+            title = ''.join([track['artist']['name'], ' - ',
+                                   track['track']['title']])
+            if title in count:
+                count[title]['count'] += 1
+            else:
+                count[title] = {'count': 1, 'track': track}
+
+        result = sorted(count.itervalues(), key=itemgetter('count'),
+                        reverse=True)
+
         return result[:NUM_TOP_TRACKS]
 
     def _parse_top_artists(self, tracks):
         d = defaultdict(int)
         for track in tracks:
-            d[track['artist']['name']] += 1
+            name = track['artist']['name']
+            if name:
+                d[name] += 1
         result = sorted(d.iteritems(), key=itemgetter(1), reverse=True)
         return result[:NUM_TOP_ARTISTS]
 
     def _parse_top_albums(self, tracks):
         d = defaultdict(int)
         for track in tracks:
-            d[track['track']['album']] += 1
+            album = track['track']['album'].strip()
+            if album:
+                d[album] += 1
         result = sorted(d.iteritems(), key=itemgetter(1), reverse=True)
         return result[:NUM_TOP_ALBUMS]

@@ -11,19 +11,20 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
 <h2 class="stats">Random tracks</h2>
 <table class="tracks">
 {% for track in random_tracks %}
-    <tr {% if loop.first %}class="first"{% endif %}>
+    <tr>
         <td class="image">
-            <img src="{{ track.track.img_small }}" />
+            {% if track.track.img_small %}
+                <a href="{{ track.track.url }}">
+                    <img width="34" height="34" src="{{ track.track.img_small }}" />
+                </a>
+            {% endif %}
         </td>
         <td class="stream">
-            streamable?
+            {% if track.streamable %}streamable?{%endif%}
         </td>
         <td class="title">
             {{ track.artist.name }} - 
             <a href="{{ track.track.url }}">{{ track.track.title }}</a>
-        </td>
-        <td class="loved">
-            loved?
         </td>
         <td class="time">
             {{ track.track.time }}
@@ -35,16 +36,14 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
 <h2 class="stats">Top tracks</h2>
     <table class="top_list">
     {% for track in top_tracks %}
-        <tr class="{% if loop.first %}first{% endif %} {{ loop.cycle('odd',
-            'even') }}">
+        <tr class=" {{ loop.cycle('odd', 'even') }}">
             <td class="id">
                 {{ loop.index }}
-            </td>
-            <td>
-                {{ track[0] }}
-            </td>
-            <td class="rank">
-                {{ track[1] }}
+            </td><td>
+                {{ track.track.artist.name }} - 
+                <a href="{{ track.track.track.url }}">{{ track.track.track.title }}</a>
+            </td><td class="rank">
+                {{ track.count }}
             </td>
         </tr>
     {% endfor %}
@@ -53,8 +52,7 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
 <h2 class="stats">Top artists</h2>
     <table class="top_list">
     {% for artist in top_artists %}
-        <tr class="{% if loop.first %}first{% endif %} {{ loop.cycle('odd',
-            'even') }}">
+        <tr class=" {{ loop.cycle('odd', 'even') }}">
             <td class="id">
                 {{ loop.index }}
             </td>
@@ -71,8 +69,7 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
 <h2 class="stats">Top albums</h2>
     <table class="top_list">
     {% for album in top_albums %}
-        <tr class="{% if loop.first %}first{% endif %} {{ loop.cycle('odd',
-            'even') }}">
+        <tr class=" {{ loop.cycle('odd', 'even') }}">
             <td class="id">
                 {{ loop.index }}
             </td>
@@ -85,5 +82,5 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
         </tr>
     {% endfor %}
     </table>
-
+<br />
 {% endblock %}
