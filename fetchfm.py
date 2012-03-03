@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
@@ -48,8 +48,6 @@ class FetchFM:
                  'user': username,
                  'api_key': self.API_KEY,
                  'format': 'json'}
-
-        #print 'Query: ', query
 
         try:
             #Create an API Request
@@ -131,7 +129,7 @@ class FetchFM:
                 streamable = track['streamable'] == '1'
 
                 result['tracks'].append(
-                    {'artist': {'name': track['artist']['#text']},
+                    {'artist': {'name' : track['artist']['#text']},
                      'track': {'title': track['name'],
                                'album': track['album']['#text'],
                                'url': track['url'],

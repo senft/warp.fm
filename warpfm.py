@@ -6,7 +6,9 @@ import cherrypy
 from jinja2 import Environment, FileSystemLoader
 from fetchfm import FetchFM
 
-env = Environment(loader=FileSystemLoader('templates'))
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+env = Environment(
+    loader=FileSystemLoader(os.path.join(CURRENT_DIR, 'templates/')))
 
 
 class WarpFM():
@@ -47,9 +49,8 @@ class WarpFM():
             return 'Error fetching data.'
 
 if __name__ == '__main__':
-    current_dir = os.path.dirname(os.path.abspath(__file__))
     conf = {'/css': {'tools.staticdir.on': True,
-                     'tools.staticdir.dir': os.path.join(current_dir,
+                     'tools.staticdir.dir': os.path.join(CURRENT_DIR,
                                                          'templates', 'css')}}
 
     cherrypy.quickstart(WarpFM(), '/', config=conf)
