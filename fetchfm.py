@@ -80,8 +80,6 @@ class FetchFM:
                  'limit': 200,
                  'format': 'json'}
 
-        print 'Query: ', query
-
         try:
             #Create an API Request
             url = self.API_URL + "?" + urllib.urlencode(query)
@@ -121,7 +119,7 @@ class FetchFM:
                         if track['@attr']['nowplaying'] == 'true':
                             # user.getRecentTracks includes the song currently
                             # playing (if there is one) (even if it is > "to").
-                            print 'Skipped currently playing track: ', track
+                            #print 'Skipped currently playing track: ', track
                             continue
 
                 timestamp = float(track['date']['uts'])

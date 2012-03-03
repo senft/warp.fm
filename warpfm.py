@@ -46,7 +46,8 @@ class WarpFM():
                                top_artists=result['top_artists'],
                                top_albums=result['top_albums'])
         else:
-            return 'Error fetching data.'
+            tmpl = env.get_template('nodata.html')
+            return tmpl.render(date='today')
 
 if __name__ == '__main__':
     conf = {'/css': {'tools.staticdir.on': True,
