@@ -35,8 +35,8 @@ class FetchFM:
         today = datetime.utcnow()
 
         # TODO: This needs to be checked.. is the date correct?
-        date_start = datetime(today.year - 1, today.month, today.day, 0, 0, 0)
-        date_end = datetime(today.year - 1, today.month, today.day, 23, 59, 0)
+        date_start = datetime(today.year - 1, today.month, today.day-1, 0, 0, 0)
+        date_end = datetime(today.year - 1, today.month, today.day-1, 23, 59, 0)
 
         ts_start = int(time.mktime(date_start.timetuple()))
         ts_end = int(time.mktime(date_end.timetuple()))
@@ -124,20 +124,7 @@ class FetchFM:
                             # playing (if there is one) (even if it is > "to").
                             #print 'Skipped currently playing track: ', track
                             continue
-
-                timestamp = float(track['date']['uts'])
-                time = datetime.fromtimestamp(timestamp).strftime('%H:%M')
-                streamable = track['streamable'] == '1'
-
-                result['tracks'].append(
-                    {'artist': {'name' : track['artist']['#text']},
-                     'track': {'title': track['name'],
-                               'album': track['album']['#text'],
-                               'url': track['url'],
-                               'streamable': streamable,
-                               'time': time,
-                               'img_small': track['image'][0]['#text']}})
-
+                result['tracks'].append(self._parse_track(track))
             result['random_tracks'] = self._get_random_tracks(result['tracks'])
             result['top_tracks'] = self._parse_top_tracks(result['tracks'])
             result['top_artists'] = self._parse_top_artists(result['tracks'])
@@ -156,6 +143,20 @@ class FetchFM:
             rtracks = random.sample(tracks, NUM_RANDOM_TRACKS)
         rtracks = sorted(rtracks, key=lambda x: x['track']['time'])
         return rtracks
+
+    def _parse_track(self, track):
+        timestamp = float(track['date']['uts'])
+        time = datetime.fromtimestamp(timestamp).strftime('%H:%M')
+        streamable = track['streamable'] == '1'
+
+        result = {'artist': {'name': track['artist']['#text']},
+                  'track': {'title': track['name'],
+                            'album': track['album']['#text'],
+                            'url': track['url'],
+                            'streamable': streamable,
+                            'time': time,
+                            'img_small': track['image'][0]['#text']}}
+        return result
 
     def _parse_top_tracks(self, tracks):
         # TODO This results in a:
