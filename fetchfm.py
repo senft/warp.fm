@@ -27,6 +27,7 @@ class FetchFM:
     def __init__(self):
         self.API_URL = config.API_URL
         self.API_KEY = config.API_KEY
+        self.start, self.end = self._get_timestamps()
 
     def _get_timestamps(self):
         """ Takes the current date, substracts one year and returns two
@@ -41,6 +42,12 @@ class FetchFM:
         ts_end = int(time.mktime(date_end.timetuple()))
 
         return (ts_start, ts_end)
+
+    def _get_formated_day(self):
+        # TODO: output nicer (localized) date
+        date = datetime.fromtimestamp(self.start)
+        return date.strftime('%A, %d.  %B %Y')
+        #return date.strftime('%x')
 
     def get_userinfo(self, username):
         result = None
@@ -68,14 +75,13 @@ class FetchFM:
 
     def get_tracks(self, username):
         result = {}
-        start, end = self._get_timestamps()
 
         # TODO This doesn't get all tracks if the user listened 200+ track that
         # day
         query = {'method': 'user.getRecentTracks',
                  'user': username,
-                 'from': start,
-                 'to': end,
+                 'from': self.start,
+                 'to': self.end,
                  'api_key': self.API_KEY,
                  'limit': 200,
                  'format': 'json'}
@@ -90,7 +96,7 @@ class FetchFM:
             #Print it
             response_data = json.load(data)
 
-            result = self._parse_response(response_data, start)
+            result = self._parse_response(response_data)
 
             #Close connection
             data.close()
@@ -101,16 +107,13 @@ class FetchFM:
 
         return result
 
-    def _parse_response(self, data, date):
+    def _parse_response(self, data):
         result = {}
         try:
             tracks = data['recenttracks']['track']
             result['tracks'] = []
 
-            # TODO: output nicer date
-            dt_date = datetime.fromtimestamp(date)
-            result['date'] = dt_date.strftime('%A, %d.  %B %Y')
-            #result['date'] = datetime.fromtimestamp(date).strftime('%x')
+            result['date'] = self._get_formated_day()
 
             for track in tracks:
 
