@@ -35,8 +35,8 @@ class FetchFM:
         today = datetime.utcnow()
 
         # TODO: This needs to be checked.. is the date correct?
-        date_start = datetime(today.year - 1, today.month, today.day-1, 0, 0, 0)
-        date_end = datetime(today.year - 1, today.month, today.day-1, 23, 59, 0)
+        date_start = datetime(today.year - 1, today.month, today.day, 0, 0, 0)
+        date_end = datetime(today.year - 1, today.month, today.day, 23, 59, 0)
 
         ts_start = int(time.mktime(date_start.timetuple()))
         ts_end = int(time.mktime(date_end.timetuple()))
