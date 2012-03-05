@@ -35,8 +35,8 @@ class FetchFM:
         today = datetime.utcnow()
 
         # TODO: This needs to be checked.. is the date correct?
-        date_start = datetime(today.year - 1, today.month, today.day-1, 0, 0, 0)
-        date_end = datetime(today.year - 1, today.month, today.day-1, 23, 59, 0)
+        date_start = datetime(today.year - 1, today.month, today.day, 0, 0, 0)
+        date_end = datetime(today.year - 1, today.month, today.day, 23, 59, 0)
 
         ts_start = int(time.mktime(date_start.timetuple()))
         ts_end = int(time.mktime(date_end.timetuple()))
@@ -117,13 +117,12 @@ class FetchFM:
 
             for track in tracks:
 
-                if '@attr' in track:
-                    if 'nowplaying' in track['@attr']:
-                        if track['@attr']['nowplaying'] == 'true':
-                            # user.getRecentTracks includes the song currently
-                            # playing (if there is one) (even if it is > "to").
-                            #print 'Skipped currently playing track: ', track
-                            continue
+                if '@attr' in track and 'nowplaying' in track['@attr']:
+                    if track['@attr']['nowplaying'] == 'true':
+                        # user.getRecentTracks includes the song currently
+                        # playing (if there is one) (even if it is > "to").
+                        #print 'Skipped currently playing track: ', track
+                        continue
                 result['tracks'].append(self._parse_track(track))
             result['random_tracks'] = self._get_random_tracks(result['tracks'])
             result['top_tracks'] = self._parse_top_tracks(result['tracks'])
@@ -169,7 +168,8 @@ class FetchFM:
             if title in count:
                 count[title]['count'] += 1
             else:
-                count[title] = {'count': 1, 'track': track}
+                count[title] = {'count': 1, 'track': track['track'], 'artist':
+                                track['artist']}
 
         result = sorted(count.itervalues(), key=itemgetter('count'),
                         reverse=True)
