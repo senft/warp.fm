@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block header %}
-    <h1>{{ name }}'s day - {{ date }}</h1>
+    <h1>warp.fm - {{ name }}'s day ({{ date }})</h1>
 {% endblock %}
 
 {% block content %}
+<a href="index"><< Go back</a>
 <h2 class="stats">General</h2>
 You have listened to {{ tracks_played }} songs that day.
 Thats {{ percentage }}% of your total {{ playcount }} tracks.
@@ -13,21 +14,18 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
 {% for track in random_tracks %}
     <tr>
         <td class="image">
-            {% if track.track.img_small %}
-                <a href="{{ track.track.url }}">
-                    <img width="34" height="34" src="{{ track.track.img_small }}" />
+            {% if track.img_small %}
+                <a href="{{ track.url }}">
+                    <img width="34" height="34" src="{{ track.img_small }}" />
                 </a>
             {% endif %}
         </td>
-        <td class="stream">
-            {% if track.streamable %}streamable?{%endif%}
-        </td>
         <td class="title">
-            {{ track.artist.name }} - 
-            <a href="{{ track.track.url }}">{{ track.track.title }}</a>
+            {{ track.artist }} - 
+            <a href="{{ track.url }}">{{ track.title }}</a>
         </td>
         <td class="time">
-            {{ track.track.time }}
+            {{ track.time }}
         </td>
     </tr>
 {% endfor %}
@@ -73,7 +71,7 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
             <td class="id">
                 {{ loop.index }}
             </td><td>
-                {{ track.artist.name }} - 
+                {{ track.track.artist }} - 
                 <a href="{{ track.track.url }}">{{ track.track.title }}</a>
             </td><td class="rank">
                 {{ track.count }}

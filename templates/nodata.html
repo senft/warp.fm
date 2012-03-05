@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 
 {% block header %}
-    <h1>Couldn't fetch data.</h1>
+    <h1>warp.fm - Couldn't fetch data.</h1>
 {% endblock %}
 
 {% block content %}
+<a href="index"><< Go back</a>
 
-<h2 align="right">You probably scrobbled no songs on {{ date }}.</h2>
+<h2 align="right">I am sorry {{ username }}. I could't find any data for that
+    day.You probably scrobbled no songs on {{ date }}.</h2>
 
 <p class="description">You can just come back tomorrow, or subscribe to the
 daily newsletter, to receive regular summaries. Just put your Email and

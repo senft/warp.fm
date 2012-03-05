@@ -9,17 +9,16 @@ body{
     text-align: left;
 }
 
+
 a:link, a:visited {
     color: #D51007;
-
-	padding: 0 1px;
 	text-decoration: underline;
 }
 a:hover, a:active {
-    #background-color: #D51007;
-	#color: #000;
+	color: #000;
 	text-decoration: none;
 }
+
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Yanone Kaffeesatz', arial, serif;
@@ -70,6 +69,15 @@ div#footer{
     color: #777;
 }
 
+table a:link, table a:visited {
+	color: #000;
+	text-decoration: none;
+}
+table a:hover, table a:active {
+    color: #D51007;
+	text-decoration: underline;
+}
+
 table.tracks {border-collapse: collapse; width: 100%;}
 table.tracks tr{height: 34px;}
 table.tracks td{border-top: 1px solid #c0c0c0; padding: 0px;}
@@ -81,3 +89,4 @@ table.top_list tr{line-height: 20px;}
 table.top_list tr.odd{background-color: #e5e5e5;}
 table.top_list td.id{color: #666; padding-left: 20px; width: 34px;}
 table.top_list td.rank{text-align: right; padding-right: 20px;}
+

@@ -124,6 +124,7 @@ class FetchFM:
                         #print 'Skipped currently playing track: ', track
                         continue
                 result['tracks'].append(self._parse_track(track))
+
             result['random_tracks'] = self._get_random_tracks(result['tracks'])
             result['top_tracks'] = self._parse_top_tracks(result['tracks'])
             result['top_artists'] = self._parse_top_artists(result['tracks'])
@@ -140,36 +141,30 @@ class FetchFM:
             rtracks = tracks
         else:
             rtracks = random.sample(tracks, NUM_RANDOM_TRACKS)
-        rtracks = sorted(rtracks, key=lambda x: x['track']['time'])
+        rtracks = sorted(rtracks, key=lambda x: x['time'])
         return rtracks
 
     def _parse_track(self, track):
         timestamp = float(track['date']['uts'])
         time = datetime.fromtimestamp(timestamp).strftime('%H:%M')
-        streamable = track['streamable'] == '1'
 
-        result = {'artist': {'name': track['artist']['#text']},
-                  'track': {'title': track['name'],
-                            'album': track['album']['#text'],
-                            'url': track['url'],
-                            'streamable': streamable,
-                            'time': time,
-                            'img_small': track['image'][0]['#text']}}
+        result = {'artist': track['artist']['#text'],
+                  'title': track['name'],
+                  'album': track['album']['#text'],
+                  'url': track['url'],
+                  'time': time,
+                  'img_small': track['image'][0]['#text']}
         return result
 
     def _parse_top_tracks(self, tracks):
-        # TODO This results in a:
-        # <a href={{ track.track.track.url }}>{{ track.track.track.title }}</a>
-        # in the template...
         count = {}
         for track in tracks:
-            title = ''.join([track['artist']['name'], ' - ',
-                                   track['track']['title']])
+            title = ''.join([track['artist'], ' - ',
+                                   track['title']])
             if title in count:
                 count[title]['count'] += 1
             else:
-                count[title] = {'count': 1, 'track': track['track'], 'artist':
-                                track['artist']}
+                count[title] = {'count': 1, 'track': track}
 
         result = sorted(count.itervalues(), key=itemgetter('count'),
                         reverse=True)
@@ -179,7 +174,7 @@ class FetchFM:
     def _parse_top_artists(self, tracks):
         d = defaultdict(int)
         for track in tracks:
-            name = track['artist']['name']
+            name = track['artist']
             if name:
                 d[name] += 1
         result = sorted(d.iteritems(), key=itemgetter(1), reverse=True)
@@ -188,7 +183,7 @@ class FetchFM:
     def _parse_top_albums(self, tracks):
         d = defaultdict(int)
         for track in tracks:
-            album = track['track']['album'].strip()
+            album = track['album'].strip()
             if album:
                 d[album] += 1
         result = sorted(d.iteritems(), key=itemgetter(1), reverse=True)
