@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <h1>Couldn't fetch data.</h1>
+{% endblock %}
+
+{% block content %}
+
+<h2 align="right">You probably scrobbled no songs on {{ date }}.</h2>
+
+<p class="description">You can just come back tomorrow, or subscribe to the
+daily newsletter, to receive regular summaries. Just put your Email and
+last.fm-username here:</p>
+
+<form method="post" action="warp">
+    <p align="center">
+        E-Mail: <input name="email" /> <br />
+        last.fm username: <input name="username" value="{{ username }}" />
+        <input type="submit" value="Submit">
+    </p>
+</form>
+
+
+
+{% endblock %}
