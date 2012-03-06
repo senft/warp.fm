@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% block title %}
+    warp.fm - {{ name }}'s day ({{ date }})
+{% endblock %}
+
 {% block header %}
     <h1>warp.fm - {{ name }}'s day ({{ date }})</h1>
 {% endblock %}
@@ -64,6 +68,7 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
         </tr>
     {% endfor %}
     </table>
+
 <h2 class="stats">Top tracks</h2>
     <table class="top_list">
     {% for track in top_tracks %}
@@ -79,6 +84,5 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
         </tr>
     {% endfor %}
     </table>
-
 <br />
 {% endblock %}

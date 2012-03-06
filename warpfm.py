@@ -18,7 +18,10 @@ class WarpFM():
         return tmpl.render()
 
     @cherrypy.expose
-    def warp(self, username):
+    def warp(self, username=None):
+        if not username:
+            raise cherrypy.HTTPRedirect("index")
+
         fetch = FetchFM()
         userinfo = fetch.get_userinfo(username)
         result = fetch.get_tracks(username)
@@ -54,5 +57,4 @@ if __name__ == '__main__':
     conf = {'/css': {'tools.staticdir.on': True,
                      'tools.staticdir.dir': os.path.join(CURRENT_DIR,
                                                          'templates', 'css')}}
-
     cherrypy.quickstart(WarpFM(), '/', config=conf)

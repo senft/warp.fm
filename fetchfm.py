@@ -46,8 +46,8 @@ class FetchFM:
     def _get_formated_day(self):
         # TODO: output nicer (localized) date
         date = datetime.fromtimestamp(self.start)
-        return date.strftime('%A, %d.  %B %Y')
-        #return date.strftime('%x')
+        #return date.strftime('%A, %d.  %B %Y')
+        return date.strftime('%x')
 
     def get_userinfo(self, username):
         result = None
