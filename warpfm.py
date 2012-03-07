@@ -51,7 +51,7 @@ class WarpFM():
         else:
             tmpl = env.get_template('nodata.html')
             return tmpl.render(username=username,
-                               date=fetch._get_formated_day())
+                               date=fetch.get_formated_day())
 
 if __name__ == '__main__':
     conf = {'/css': {'tools.staticdir.on': True,

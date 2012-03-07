@@ -29,6 +29,10 @@ class FetchFM:
         self.API_KEY = config.API_KEY
         self.start, self.end = self._get_timestamps()
 
+        # Used to cache infos on an specific artist, so we dont fetch artist
+        # data multiple times
+        self._artist_cache = {}
+
     def _get_timestamps(self):
         """ Takes the current date, substracts one year and returns two
         timestamps for that day (00:00 and 23:59) """
@@ -43,7 +47,7 @@ class FetchFM:
 
         return (ts_start, ts_end)
 
-    def _get_formated_day(self):
+    def get_formated_day(self):
         # TODO: output nicer (localized) date
         date = datetime.fromtimestamp(self.start)
         #return date.strftime('%A, %d.  %B %Y')
@@ -87,18 +91,16 @@ class FetchFM:
                  'format': 'json'}
 
         try:
-            #Create an API Request
+            # Create an API Request
             url = self.API_URL + "?" + urllib.urlencode(query)
 
-            #Send Request and Collect it
+            # Send Request and Collect it
             data = urllib2.urlopen(url)
-
-            #Print it
             response_data = json.load(data)
 
             result = self._parse_response(response_data)
 
-            #Close connection
+            # Close connection
             data.close()
         except urllib2.HTTPError, e:
             print "HTTP error: %d" % e.code
@@ -108,12 +110,16 @@ class FetchFM:
         return result
 
     def _parse_response(self, data):
+        # TODO Pull try/except block in the for-loop and get rid of the
+        # `if '@attr' in ...
+        # just catch the KeyError
+
         result = {}
         try:
             tracks = data['recenttracks']['track']
             result['tracks'] = []
 
-            result['date'] = self._get_formated_day()
+            result['date'] = self.get_formated_day()
 
             for track in tracks:
 
@@ -155,6 +161,39 @@ class FetchFM:
                   'time': time,
                   'img_small': track['image'][0]['#text']}
         return result
+
+    def get_artist_info(self, artist):
+        if artist in self._artist_cache:
+            return self._artist_cache[artist]
+
+        # Else: Fetch from last.fm
+        query = {'method': 'artist.getInfo',
+                 'arrist': artist,
+                 'api_key': self.API_KEY,
+                 'format': 'json'}
+
+        try:
+            # Create an API Request
+            url = self.API_URL + "?" + urllib.urlencode(query)
+
+            # Send Request and Collect it
+            data = urllib2.urlopen(url)
+
+            # Print it
+            response_data = json.load(data)
+
+            result = self._parse_response(response_data)
+
+            #Close connection
+            data.close()
+        except urllib2.HTTPError, e:
+            print "HTTP error: %d" % e.code
+        except urllib2.URLError, e:
+            print "Network error: %s" % e.reason.args[1]
+
+    def _parse_artist(self, artist):
+
+
 
     def _parse_top_tracks(self, tracks):
         count = {}
