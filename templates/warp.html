@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-<a href="index"><< Go back</a>
+<a href="index">&lt;&lt; Go back</a>
 <h2 class="stats">General</h2>
 You have listened to {{ tracks_played }} songs that day.
 Thats {{ percentage }}% of your total {{ playcount }} tracks.
@@ -44,12 +44,12 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
 <h2 class="stats">Top artists</h2>
     <table class="top_list">
     {% for artist in top_artists %}
-        <tr class=" {{ loop.cycle('odd', 'even') }}">
+        <tr class="{{ loop.cycle('odd', 'even') }}">
             <td class="id">
                 {{ loop.index }}
             </td>
             <td>
-                <a href="{{ artist.artist.url }}">{{ artist.artist.name }}</a> - 
+                <a href="{{ artist.artist.url }}">{{ artist.artist.name }}</a>
             </td>
             <td class="rank">
                 {{ artist.count }}
@@ -61,7 +61,7 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
 <h2 class="stats">Top albums</h2>
     <table class="top_list">
     {% for album in top_albums %}
-        <tr class=" {{ loop.cycle('odd', 'even') }}">
+        <tr class="{{ loop.cycle('odd', 'even') }}">
             <td class="id">
                 {{ loop.index }}
             </td>
@@ -78,7 +78,7 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
 <h2 class="stats">Top tracks</h2>
     <table class="top_list">
     {% for track in top_tracks %}
-        <tr class=" {{ loop.cycle('odd', 'even') }}">
+        <tr class="{{ loop.cycle('odd', 'even') }}">
             <td class="id">
                 {{ loop.index }}
             </td><td>

@@ -132,7 +132,6 @@ class FetchFM:
                         #print 'Skipped currently playing track: ', track
                         continue
                 result['tracks'].append(self._parse_track(track))
-                break
 
             result['random_tracks'] = self._get_random_tracks(result['tracks'])
             result['top_tracks'] = self._parse_top_tracks(result['tracks'])
@@ -145,8 +144,8 @@ class FetchFM:
         return result
 
     def _get_random_tracks(self, tracks):
-        """ If there are 10+ tracks it returns 10 random picks, else all (sorted
-        by the time played). """
+        """ If there are 10+ tracks it returns 10 random picks, else all
+            (sorted by the time played). """
         if len(tracks) <= NUM_RANDOM_TRACKS:
             rtracks = tracks
         else:
@@ -165,7 +164,6 @@ class FetchFM:
                   'time': time,
                   'img': track['image'][0]['#text']}
         return result
-
 
     def _parse_top_tracks(self, tracks):
         count = {}
@@ -190,11 +188,13 @@ class FetchFM:
                 count[name]['count'] += 1
             else:
                 count[name] = {'count': 1, 'artist': track['artist']}
+
         result = sorted(count.itervalues(), key=itemgetter('count'),
                         reverse=True)
         return result[:NUM_TOP_ARTISTS]
 
     def _parse_top_albums(self, tracks):
+        # TODO Do we want album links?
         d = defaultdict(int)
         for track in tracks:
             album = track['album'].strip()
