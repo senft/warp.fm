@@ -18,14 +18,20 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
 {% for track in random_tracks %}
     <tr>
         <td class="image">
-            {% if track.img_small %}
+            {% if track.img%}
                 <a href="{{ track.url }}">
-                    <img width="34" height="34" src="{{ track.img_small }}" />
+                    <img width="34" height="34" src="{{ track.img}}" />
                 </a>
+            {% else %}
+                {% if track.artist.img %}
+                    <a href="{{ track.url }}">
+                        <img width="34" height="34" src="{{ track.artist.img}}" />
+                    </a>
+                {% endif %}
             {% endif %}
         </td>
         <td class="title">
-            {{ track.artist }} - 
+            <a href="{{ track.artist.url }}">{{ track.artist.name }}</a> - 
             <a href="{{ track.url }}">{{ track.title }}</a>
         </td>
         <td class="time">
@@ -43,10 +49,10 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
                 {{ loop.index }}
             </td>
             <td>
-                {{ artist[0] }}
+                <a href="{{ artist.artist.url }}">{{ artist.artist.name }}</a> - 
             </td>
             <td class="rank">
-                {{ artist[1] }}
+                {{ artist.count }}
             </td>
         </tr>
     {% endfor %}
@@ -76,7 +82,7 @@ Thats {{ percentage }}% of your total {{ playcount }} tracks.
             <td class="id">
                 {{ loop.index }}
             </td><td>
-                {{ track.track.artist }} - 
+                <a href="{{ track.track.artist.url }}">{{ track.track.artist.name }}</a> - 
                 <a href="{{ track.track.url }}">{{ track.track.title }}</a>
             </td><td class="rank">
                 {{ track.count }}
